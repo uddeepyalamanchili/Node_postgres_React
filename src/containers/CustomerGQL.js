@@ -4,7 +4,7 @@ import customerService from '../services/customer';
 import customerGQL,{getRecords,addRecords,deleteRecord,updateRecords,searchRecords} from '../services/customer-gql';
 
 export default class CustomerApp extends React.Component {
-    state = { items:[], id:'' , name: '',email:'',address:'',phone:'',dob:'',searchText:'',searchField:'',buttonLabel:"Add Customer"};
+    state = { items:[], id:'' , name: '',email:'',address:'',phone:'',dob:'',searchText:'',searchField:'name',buttonLabel:"Add Customer"};
   constructor(p) {
     super(p);  
     //Another approach to handle this 
@@ -53,20 +53,20 @@ export default class CustomerApp extends React.Component {
               <br/>
               <br/>
         </form>
-        <input name= "searchtext"
-           type="text"
-           placeholder="Enter text to search"
-           onChange={this.handleChange}
-           value={this.state.searchText}
-           />&nbsp; &nbsp;
-        <select id = "searchfield"
+        <input type="text"
+                name="searchText"
+                onChange={this.handleChange}
+                value={this.state.searchText}
+                placeholder="enter text to search"
+        />    &nbsp; &nbsp;
+        <select name="searchField"
           onChange={this.handleChange}
           value={this.state.searchField}
           >
             <option value = "name">Name</option>
             <option value = "email">E-mail</option>
             <option value = "address">Address</option>
-        </select>&nbsp;
+        </select>&nbsp;&nbsp; &nbsp;
          <button onClick={this.searchItems}
          >Search</button> 
          &nbsp;| &nbsp;
@@ -87,15 +87,27 @@ export default class CustomerApp extends React.Component {
   }
 
 searchItems = () =>{
-       searchRecords(this.state.searchText,this.state.searchField);
+  if(this.state.searchText!=''){
+       searchRecords(this.state.searchText,this.state.searchField).then((result)=>{
+        console.log(result)
+        this.setState({items:result});
+      })
+      this.setState({searchText:""});
   }
+  else{
+    getRecords().then((result)=>{
+      //console.log(result)
+      this.setState({items:result});
+  })
+  }
+}
 
 deleteItem = (id) => { 
     console.log()
     deleteRecord(id).then((result)=>{
         console.log(result)
         getRecords().then((result)=>{
-            console.log(result)
+            //console.log(result)
             this.setState({items:result});
         })
         })

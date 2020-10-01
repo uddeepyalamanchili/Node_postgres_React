@@ -18,6 +18,25 @@ export var getRecords = async function(){
     return response.data.customers;
   }
 
+export var searchRecords = async function(text,field){
+    console.log('fields in search : '+text+' |||'+field);
+    var query = `
+    {
+      customers(`+field+`: "`+text+`") {
+        id,
+        name,
+        email,
+        phone,address
+      }
+    }`;
+    let response = await fetch({
+        query: query,
+      })
+    //let result = await response.json();
+    console.log("in update :"+JSON.stringify( response));
+    return response.data.customers;
+  }
+
 model.getRecordsBySearch = function(field,text){
 	let searchRecords=[];
 	for (var i = 0;i < customers.length; i++) {
