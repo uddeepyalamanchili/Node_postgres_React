@@ -1,10 +1,10 @@
 import React from 'react';
 import Menu from '../components/Menu'
 import customerService from '../services/customer';
-import customerGQL,{getRecords} from '../services/customer-gql';
+import customerGQL,{getRecords,addRecords,deleteRecord,updateRecords} from '../services/customer-gql';
 
 export default class CustomerApp extends React.Component {
-  state = { items:[], id:'' , name: '',email:'',address:'',phone:'',buttonLabel:"Add Customer"};
+  state = { items:[], id:'' , name: '',email:'',address:'',phone:'',dob:'',buttonLabel:"Add Customer"};
   constructor(p) {
     super(p);  
     //Another approach to handle this 
@@ -47,6 +47,7 @@ export default class CustomerApp extends React.Component {
             value={this.state.address}
             placeholder="address"
           /><br/><br/>
+
           <button>
             {this.state.buttonLabel}
           </button>
@@ -69,9 +70,13 @@ export default class CustomerApp extends React.Component {
 
   deleteItem = (id) => { 
     console.log()
-    customerService.deleteRecord(id);
-   // var temp = this.state.items.filter(item => item.id !== id)
-    this.setState({ items:customerService.getRecords() });
+    deleteRecord(id).then((result)=>{
+        console.log(result)
+        getRecords().then((result)=>{
+            console.log(result)
+            this.setState({items:result});
+        })
+        })
  }
  
   addUpdateItem = (e) => {
@@ -84,15 +89,26 @@ export default class CustomerApp extends React.Component {
       email: this.state.email,
       phone: this.state.phone,
       address: this.state.address,
+      //dob: this.state.dob
     };
     if(this.state.id !==''){
         newItem.id = this.state.id;
-        customerService.updateRecord(newItem);
-        this.state.items =  customerService.getRecords();
+        updateRecords(newItem).then((result)=>{
+            console.log(result)
+            getRecords().then((result)=>{
+                console.log(result)
+                this.setState({items:result});
+            })
+        })
     }else{
       newItem.id = Date.now();
-      customerService.addRecord(newItem);
-      this.state.items =  customerService.getRecords();
+      addRecords(newItem).then((result)=>{
+        console.log(result)
+        getRecords().then((result)=>{
+            console.log(result)
+            this.setState({items:result});
+        })
+        })
     }
     this.setState({
         name: '',
@@ -135,7 +151,8 @@ class CustomerList extends React.Component {
               </tr>
           </thead>
           <tbody>
-            {this.props.items.map((item) => (
+            {
+            this.props.items.map((item) => (
             <tr key={item.id}>
                 <td>
                 {item.id}

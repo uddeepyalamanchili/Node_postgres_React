@@ -37,9 +37,66 @@ model.getRecordById = function(recordId){
 	return {};
 }
 
-model.addRecord = function(record){
-	return customers.push(record);
-}
+export var addRecords = async function(record){
+    console.log("record in addRecords"+console.log(JSON.stringify(record)));
+    var query = `
+    mutation {
+        addCustomer(name:"`+record.name+`",email:"`+record.email+`",phone:"`+record.phone+`",address:"`+record.address+`") 
+        {
+          id,
+          name,
+          email,
+          phone,
+          address,
+        }
+      }`;
+    console.log("query in add records : \n"+query);
+    let response = await fetch({
+        query: query,
+      })
+    console.log("response in add records :"+JSON.stringify(response));
+    return {};
+  }
+
+
+  export var updateRecords = async function(record){
+    console.log("record in updateRecords"+JSON.stringify(record));
+    var query = `
+    mutation {
+        updateCustomer(id:`+record.id+`,name:"`+record.name+`",email:"`+record.email+`"
+          ,phone:"`+record.phone+`",address:"`+record.address+`") 
+        {
+          id,
+          name
+          email
+          phone
+          address
+        }
+      }`;
+    console.log("query in add records : \n"+query);
+    let response = await fetch({
+        query: query,
+      })
+    console.log("response in update records :"+JSON.stringify(response));
+    return {};
+  }
+
+  export var deleteRecord = async function(id){
+    console.log("id in delete"+JSON.stringify(id));
+    var query = `
+    mutation {
+        deleteCustomer(id:`+id+`) {
+          id
+          name
+        }
+      }`;
+    console.log("query in delete record: \n"+query);
+    let response = await fetch({
+        query: query,
+      })
+    console.log("response in delete :"+JSON.stringify(response));
+    return {};
+  }
 
 model.deleteRecord = function(id){
 	let temp = [];
