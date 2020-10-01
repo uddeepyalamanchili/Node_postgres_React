@@ -1,10 +1,10 @@
 import React from 'react';
 import Menu from '../components/Menu'
 import customerService from '../services/customer';
-import customerGQL,{getRecords,addRecords,deleteRecord,updateRecords} from '../services/customer-gql';
+import customerGQL,{getRecords,addRecords,deleteRecord,updateRecords,searchRecords} from '../services/customer-gql';
 
 export default class CustomerApp extends React.Component {
-  state = { items:[], id:'' , name: '',email:'',address:'',phone:'',dob:'',buttonLabel:"Add Customer"};
+    state = { items:[], id:'' , name: '',email:'',address:'',phone:'',dob:'',searchText:'',searchField:'',buttonLabel:"Add Customer"};
   constructor(p) {
     super(p);  
     //Another approach to handle this 
@@ -23,37 +23,55 @@ export default class CustomerApp extends React.Component {
         <Menu/>
         <h3>CustomerApp</h3>
         <form onSubmit={this.addUpdateItem}>
-          <input type="text"
-            name="name"
-            onChange={this.handleChange}
-            value={this.state.name}
-            placeholder="name"
-          /><br/><br/>
-          <input type="text"
-            name="email"
-            onChange={this.handleChange}
-            value={this.state.email}
-            placeholder="email"
-          /><br/><br/>
-          <input type="text"
-            name="phone"
-            onChange={this.handleChange}
-            value={this.state.phone}
-            placeholder="phone"
-          /><br/><br/>
-          <input type="text"
-            name="address"
-            onChange={this.handleChange}
-            value={this.state.address}
-            placeholder="address"
-          /><br/><br/>
-
-          <button>
-            {this.state.buttonLabel}
-          </button>
-          <br/>
-          <br/>
+              <input type="text"
+                name="name"
+                onChange={this.handleChange}
+                value={this.state.name}
+                placeholder="name"
+              /><br/><br/>
+              <input type="text"
+                name="email"
+                onChange={this.handleChange}
+                value={this.state.email}
+                placeholder="email"
+              /><br/><br/>
+              <input type="text"
+                name="phone"
+                onChange={this.handleChange}
+                value={this.state.phone}
+                placeholder="phone"
+              /><br/><br/>
+              <input type="text"
+                name="address"
+                onChange={this.handleChange}
+                value={this.state.address}
+                placeholder="address"
+              /><br/><br/>
+              <button>
+                {this.state.buttonLabel}
+              </button>
+              <br/>
+              <br/>
         </form>
+        <input name= "searchtext"
+           type="text"
+           placeholder="Enter text to search"
+           onChange={this.handleChange}
+           value={this.state.searchText}
+           />&nbsp; &nbsp;
+        <select id = "searchfield"
+          onChange={this.handleChange}
+          value={this.state.searchField}
+          >
+            <option value = "name">Name</option>
+            <option value = "email">E-mail</option>
+            <option value = "address">Address</option>
+        </select>&nbsp;
+         <button onClick={this.searchItems}
+         >Search</button> 
+         &nbsp;| &nbsp;
+         <br/><br/>
+
         <CustomerList 
         items={this.state.items} 
         editItem={this.editItem} 
@@ -68,7 +86,11 @@ export default class CustomerApp extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  deleteItem = (id) => { 
+searchItems = () =>{
+       searchRecords(this.state.searchText,this.state.searchField);
+  }
+
+deleteItem = (id) => { 
     console.log()
     deleteRecord(id).then((result)=>{
         console.log(result)
