@@ -4,6 +4,7 @@ import About from './containers/About';
 import CustomerApp from './containers/CustomerApp';
 import Customer from './containers/Customer';
 import CustomerAdd from './containers/CustomerAdd';
+import CustomerGQL from './containers/CustomerGQL';
 import Temperature from './containers/Temperature';
 import React, { useContext, createContext, useState,useEffect } from "react";
 import {
@@ -28,6 +29,7 @@ export default  function App() {
           <Route exact path='/customer/edit/:id' component={CustomerAdd} />
           <Route exact path='/temperature' component={Temperature} />
           <Route exact path='/customer-app' component={CustomerApp} />
+          <Route exact path='/customer-gql' component={CustomerGQL} />
           <Route exact path='/home' component={Home} />
           <Route exact path='/about' component={About} />
        </Switch>
