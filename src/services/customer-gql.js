@@ -1,7 +1,17 @@
-const {createApolloFetch} = require('apollo-fetch');
+const { createApolloFetch } = require('apollo-fetch');
 const fetch = createApolloFetch({
-    uri:'http://localhost:4000/customer'
-});
+	uri: 'http://localhost:4000/customer',
+	headers: {
+		"authorization":"rama"
+	  },
+  });
+
+  fetch.use(({ request, options }, next) => {
+	options.headers = {
+	  "authorization": "rama"
+	};
+	next();
+  });
 var model ={};
 var customers = [
 	{id:1, name:'Vivek', email:'vivek@gmail.com', phone:'112233', address:'ahmedabad'},
