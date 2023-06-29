@@ -1,3 +1,8 @@
+## Summary
+
+Designed a basic full-stack application to support CRUD operations. Designed and developed Frontend and integrated with the developed backend(Developed using Node and ExpressJS) and REST API's. Enhanced the GUI using Reactstrap.
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
